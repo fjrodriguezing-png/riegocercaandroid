@@ -1,0 +1,5 @@
+COMUNIDAD DE REGANTES NOVA LIMIA
+- Eliminada completamente la sección Buscar cercanos de la pantalla principal.
+- Eliminados sus controles, estado GPS y lista asociada para evitar referencias JavaScript nulas.
+- Se mantienen en menú: Importar datos, Destino, Elementos por radio y Radio manual.
+- Se conserva Google Maps y la búsqueda por radio.

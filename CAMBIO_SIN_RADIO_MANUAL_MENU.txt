@@ -1,0 +1,4 @@
+COMUNIDAD DE REGANTES NOVA LIMIA
+- Eliminada la opción Radio manual del menú desplegable principal.
+- Eliminado su manejador JavaScript para evitar referencias a un botón inexistente.
+- El campo Radio manual dentro de Elementos por radio se conserva, para poder introducir una distancia personalizada desde esa pantalla.

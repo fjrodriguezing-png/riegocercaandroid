@@ -1,0 +1,5 @@
+COMUNIDAD DE REGANTES NOVA LIMIA
+- El dibujo generado a partir de la foto se usa como icono Android.
+- Generados mdpi 48x48, hdpi 72x72, xhdpi 96x96, xxhdpi 144x144, xxxhdpi 192x192 y maestro 1024x1024.
+- Nombre Android bajo el icono: Comunidad de Regantes Nova Limia.
+- Nombre visible dentro de la app actualizado a Comunidad de Regantes Nova Limia.

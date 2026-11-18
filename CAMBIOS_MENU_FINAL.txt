@@ -1,0 +1,13 @@
+COMUNIDAD DE REGANTES NOVA LIMIA
+
+Cambios del menú:
+- Quitado el botón/logo de Inicio (casita) de la cabecera/pantalla principal.
+- Quitada la opción Inicio del menú desplegable.
+- Quitada Buscar cercanos del menú desplegable (Buscar cercanos sigue en la pantalla principal).
+- Cambiado “Maps · elementos por radio” por “Elementos por radio”.
+- Orden del menú:
+  1. Importar datos
+  2. Destino
+  3. Elementos por radio
+  4. Radio manual
+  5. Cerrar menú

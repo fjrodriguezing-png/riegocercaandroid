@@ -1,0 +1,4 @@
+COMUNIDAD DE REGANTES NOVA LIMIA
+- Texto/nombre mostrado por Android debajo del icono: C.R.N.L.
+- El nombre completo dentro de la app se mantiene como Comunidad de Regantes Nova Limia.
+- Se conserva el dibujo como icono de la APK.

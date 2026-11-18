@@ -1,0 +1,10 @@
+REGADÍO BAIXA LIMIA 1.0.2 - CORRECCIÓN BÚSQUEDA POR RADIO
+
+Corregido/reforzado:
+- El botón cambia inmediatamente a BUSCANDO… para confirmar el toque.
+- GPS solicita ubicación precisa, sin usar una posición antigua (maximumAge=0).
+- Timeout ampliado a 20 segundos.
+- Se añadió callback de error que antes no estaba presente en Elementos por radio.
+- Ahora informa específicamente si: permiso GPS denegado, ubicación no disponible o timeout.
+- Android WebView acepta permiso fine o coarse y limpia correctamente el callback.
+- Si ocurre un error JavaScript se muestra en la propia sección para poder diagnosticarlo.

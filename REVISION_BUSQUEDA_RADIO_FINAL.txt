@@ -1,0 +1,11 @@
+REGADÍO BAIXA LIMIA - BÚSQUEDA POR RADIO REESCRITA
+
+Se ha sustituido la lógica anterior por un flujo único y más robusto:
+- getGps(): una sola función para solicitar GPS y gestionar errores.
+- gpsForRow(): valida y convierte UTM/GPS por fila.
+- rankedWithinRadius(): calcula Haversine, filtra por radio y ordena por distancia.
+- La búsqueda de pantalla principal y Elementos por radio comparten el mismo motor.
+- El botón muestra BUSCANDO… durante la petición.
+- Al cambiar radio se limpian resultados anteriores.
+- Los resultados aparecen en lista ordenada antes de Maps.
+- Node.js --check confirma sintaxis JavaScript válida.

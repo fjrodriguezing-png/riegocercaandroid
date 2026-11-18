@@ -1,0 +1,7 @@
+REGADÍO BAIXA LIMIA
+
+BOTÓN INICIO GLOBAL
+- Se añade 🏠 Inicio en la cabecera superior junto al menú ☰.
+- El botón permanece disponible desde Inicio, Destino, Datos, Elementos por radio y Radio manual.
+- Al pulsarlo oculta cualquier sección del menú y recupera la pantalla principal con Buscar cercanos.
+- La opción Inicio continúa también dentro del menú ☰.

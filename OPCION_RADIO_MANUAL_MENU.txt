@@ -1,0 +1,11 @@
+REGADÍO BAIXA LIMIA 1.0.2
+
+Nueva opción en menú ☰:
+📏 Radio manual
+
+Al pulsarla:
+1. Se cierra el menú desplegable.
+2. Se abre Elementos por radio.
+3. El cursor se coloca directamente en Radio manual (metros).
+4. El valor queda seleccionado para poder escribir inmediatamente otro radio desde el teclado del móvil.
+5. Después se usa BUSCAR ELEMENTOS y se muestra la lista ordenada antes de abrir Google Maps.

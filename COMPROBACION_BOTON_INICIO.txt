@@ -1,0 +1,18 @@
+REGADÍO BAIXA LIMIA - BOTÓN INICIO VERIFICADO
+
+El botón global 🏠 Inicio se ha comprobado para:
+- Pantalla principal / Buscar cercanos.
+- Destino.
+- Datos / Importar datos.
+- Elementos por radio.
+- Radio manual.
+
+Al pulsar Inicio:
+1. sale del modo de pantalla del menú;
+2. oculta todas las secciones del menú;
+3. recupera la sección principal Buscar cercanos;
+4. sube al inicio;
+5. cierra el menú desplegable.
+
+Los botones X de las secciones también usan showHome().
+JavaScript validado con node --check.

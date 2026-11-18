@@ -1,0 +1,8 @@
+REGADÍO BAIXA LIMIA
+
+CAMBIO DE NAVEGACIÓN
+- Al escoger cualquier opción del menú, se ocultan todas las opciones de la pantalla principal.
+- Solo queda visible la sección elegida: Destino, Datos, Elementos por radio o Radio manual.
+- Se añade Inicio al menú para volver a la pantalla principal.
+- El botón X de cada sección vuelve también a Inicio.
+- Buscar cercanos solo aparece en la pantalla principal, nunca detrás de una opción del menú.

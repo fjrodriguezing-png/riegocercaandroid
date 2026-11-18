@@ -1,0 +1,12 @@
+REGADÍO BAIXA LIMIA 1.0.2
+
+CAMBIO DE PANTALLA PRINCIPAL
+- Datos y Destino ya no aparecen permanentemente en la pantalla principal.
+- Se accede a ambas funciones desde el menú de tres líneas de la esquina superior derecha.
+- Al pulsar Destino, se abre únicamente la sección Destino (Nombre) con el botón Maps.
+- Al pulsar Importar datos, se abre únicamente la sección Datos.
+- Cada sección dispone de botón X para volver a ocultarla.
+- El menú sigue cerrándose al tocar fuera.
+
+GITHUB
+Sube el contenido de este ZIP a la raíz del repositorio, Commit changes y ejecuta Actions > Compilar APK Regadío Baixa Limia 1.0.2.

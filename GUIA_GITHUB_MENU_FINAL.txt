@@ -1,0 +1,17 @@
+REGADÍO BAIXA LIMIA 1.0.2 - PROYECTO GITHUB
+
+MENÚ
+- Botón de tres líneas en la esquina superior derecha.
+- El menú se cierra al pulsar una opción.
+- El menú también se cierra automáticamente al tocar cualquier zona fuera del panel.
+
+SUBIR Y COMPILAR EN GITHUB
+1. Descomprime el ZIP.
+2. Entra dentro de la carpeta RegadioBaixaLimia_V102.
+3. Sube TODO su contenido interior a la raíz del repositorio. Debes ver app, .github, build.gradle y settings.gradle directamente en la raíz.
+4. Commit changes.
+5. Abre Actions.
+6. Selecciona Compilar APK Regadío Baixa Limia 1.0.2.
+7. Pulsa Run workflow.
+8. Cuando termine en verde, descarga Artifacts > Regadio-Baixa-Limia-1.0.2-APK.
+9. Descomprime el artefacto e instala Regadio-Baixa-Limia-1.0.2-debug.apk.

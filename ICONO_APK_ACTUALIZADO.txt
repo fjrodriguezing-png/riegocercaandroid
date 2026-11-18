@@ -1,0 +1,6 @@
+REGADÍO BAIXA LIMIA 1.0.2
+La foto IMG_20261118_192601.jpg se ha integrado como icono de la APK.
+Se generaron iconos Android mdpi 48x48, hdpi 72x72, xhdpi 96x96, xxhdpi 144x144 y xxxhdpi 192x192, además de una fuente 1024x1024.
+AndroidManifest usa @mipmap/ic_launcher para icon y roundIcon.
+El fondo anterior de la pantalla principal se mantiene.
+versionCode 14.

@@ -1,0 +1,8 @@
+REGADÍO BAIXA LIMIA 1.0.2
+
+Se ha integrado FONDO DE APP.png en app/src/main/assets/fondo_app.png.
+- La imagen se muestra como fondo de la pantalla principal.
+- En móvil se prioriza la parte izquierda de la imagen, donde aparece el campo de riego.
+- Las tarjetas tienen transparencia ligera para que el fondo siga visible sin perder legibilidad.
+- Se conserva el menú, Buscar cercanos, radio manual, lista ordenada de resultados y Google Maps.
+- versionCode 13.

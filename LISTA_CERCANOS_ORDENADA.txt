@@ -1,0 +1,10 @@
+REGADÍO BAIXA LIMIA 1.0.2
+
+En ☰ > Maps · elementos por radio:
+1. Introduce o selecciona el radio.
+2. Pulsa BUSCAR ELEMENTOS.
+3. Antes de abrir Google Maps se muestra una LISTA NUMERADA de NOMBRE.
+4. La lista está ordenada estrictamente de menor distancia a mayor distancia.
+5. Cada fila muestra NOMBRE, distancia (con decimal cuando es menor de 10 m) y TIPO.
+6. Solo después de obtener resultados aparece ABRIR EN GOOGLE MAPS.
+7. El botón Maps usa como máximo los 10 elementos más cercanos para la ruta multidestino.

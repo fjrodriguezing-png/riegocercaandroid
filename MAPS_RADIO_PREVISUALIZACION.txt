@@ -1,0 +1,10 @@
+REGADÍO BAIXA LIMIA 1.0.2 - RADIO MANUAL Y PREVISUALIZACIÓN
+
+☰ > Maps · elementos por radio
+1. Selecciona un radio rápido: 10, 25, 50, 100, 250 o 500 m; el valor pasa al campo Radio manual.
+2. También puedes escribir directamente cualquier radio de 1 a 100000 m.
+3. Pulsa BUSCAR ELEMENTOS.
+4. La app obtiene el GPS y muestra, antes de abrir Maps, los NOMBRE encontrados ordenados por distancia, mostrando distancia y TIPO.
+5. Solo después aparece ABRIR EN GOOGLE MAPS.
+6. Google Maps recibe hasta los 10 elementos más cercanos como ruta multidestino.
+7. Si se encuentran más de 50, la app lista los primeros 50 y muestra cuántos quedan; el botón Maps sigue usando los 10 más cercanos.

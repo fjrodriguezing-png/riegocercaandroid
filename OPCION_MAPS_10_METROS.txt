@@ -1,0 +1,17 @@
+REGADÍO BAIXA LIMIA 1.0.2 - MAPS 10 METROS
+
+NUEVA OPCIÓN DEL MENÚ
+🗺️ Maps · elementos a 10 m
+
+FUNCIONAMIENTO
+1. Obtiene la ubicación precisa del móvil.
+2. Convierte las coordenadas X/Y de cada elemento a GPS.
+3. Calcula la distancia en línea recta.
+4. Selecciona todos los elementos con distancia <= 10 m.
+5. Los ordena del más cercano al más lejano.
+6. Abre Google Maps con una ruta multidestino formada por hasta 10 puntos de ese conjunto.
+7. Si hay más de 10 elementos dentro de 10 m, informa del total y abre los 10 más cercanos para mantener una URL de Maps manejable.
+8. Si no hay resultados, lo indica en la app y no abre Maps.
+
+NOTA
+Google Maps URLs no ofrecen una capa arbitraria de marcadores del Excel. Esta implementación representa los elementos cercanos como paradas de una ruta multidestino, que es compatible con Google Maps sin API key.

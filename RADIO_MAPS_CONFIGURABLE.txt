@@ -1,0 +1,14 @@
+REGADÍO BAIXA LIMIA 1.0.2 - RADIO CONFIGURABLE EN GOOGLE MAPS
+
+En menú ☰ > Maps · elementos por radio:
+- 10 m
+- 25 m
+- 50 m
+- 100 m
+- 250 m
+- 500 m
+- Personalizado: 1 a 100000 m
+
+El usuario elige primero el radio y después pulsa MOSTRAR EN GOOGLE MAPS.
+La app obtiene GPS preciso, calcula distancias, filtra por el radio seleccionado y ordena del más cercano al más lejano.
+Google Maps recibe hasta los 10 elementos más cercanos del conjunto filtrado como ruta multidestino.

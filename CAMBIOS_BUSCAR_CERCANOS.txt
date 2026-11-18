@@ -1,0 +1,7 @@
+REGADÍO BAIXA LIMIA 1.0.2
+- Buscar cercanos vuelve a estar visible permanentemente en la pantalla principal.
+- Radio inicial 50 m y botón para restablecer a 50 m.
+- Usa ubicación GPS de alta precisión y lista hasta 20 elementos dentro del radio.
+- Al tocar un resultado abre Destino con el elemento seleccionado, listo para Maps.
+- Datos y Destino siguen ocultos y accesibles desde el menú ☰.
+- versionCode 8.

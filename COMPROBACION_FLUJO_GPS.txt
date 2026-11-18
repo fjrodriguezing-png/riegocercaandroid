@@ -1,0 +1,18 @@
+REGADÍO BAIXA LIMIA 1.0.2 - COMPROBACIÓN DEL FLUJO GPS
+
+FLUJO VALIDADO EN CÓDIGO
+1. BUSCAR CERCANOS está visible en la pantalla principal.
+2. Android declara ACCESS_FINE_LOCATION y ACCESS_COARSE_LOCATION.
+3. WebView habilita geolocalización y solicita permisos Android.
+4. Buscar cercanos solicita posición con enableHighAccuracy=true y timeout 15 s.
+5. Radio predeterminado: 50 m, configurable hasta 100000 m.
+6. X/Y se convierten desde ETRS89 / UTM 29N a latitud/longitud.
+7. La distancia se calcula mediante Haversine.
+8. Se filtran resultados dentro del radio, se ordenan del más cercano al más lejano y se muestran hasta 20.
+9. Se muestra la precisión reportada por el GPS.
+10. Tocar un resultado selecciona el elemento y abre Destino.
+11. MapsBridge valida coordenadas y abre com.google.android.apps.maps mediante google.navigation.
+12. Si Google Maps no está disponible, existe fallback web.
+13. Workflow GitHub conserva assembleDebug.
+
+NOTA: la revisión valida el flujo completo a nivel de código. La precisión y autorización GPS reales dependen del teléfono, Android y disponibilidad de señal en campo.

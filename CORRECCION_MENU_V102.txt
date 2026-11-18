@@ -1,0 +1,12 @@
+REGADÍO BAIXA LIMIA 1.0.2 - CORRECCIÓN MENÚ
+
+CAUSA CORREGIDA
+El código intentaba usar la función $ para encontrar menuBtn y menuPanel antes de que la función $ hubiera sido inicializada. Eso provocaba un error JavaScript al arrancar y el botón de tres líneas quedaba sin evento.
+
+CORRECCIÓN
+- La función de selección DOM se inicializa antes del menú.
+- Se elimina la declaración duplicada.
+- Se mantiene cierre al tocar fuera.
+- Se añade touch-action: manipulation y prioridad táctil/z-index al botón para Android WebView.
+- Se conservan Destino, Datos y AndroidMaps.navigate.
+- versionCode: 7; versionName: 1.0.2.

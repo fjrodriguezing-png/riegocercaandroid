@@ -1,0 +1,13 @@
+REGADÍO BAIXA LIMIA 1.0.2 - REVISIÓN
+
+Comprobado:
+- Buscar cercanos visible en pantalla principal.
+- Datos y Destino ocultos en pantalla principal y accesibles desde menú.
+- Menú inicializa sin error y se cierra al tocar fuera.
+- GPS usa enableHighAccuracy y radio inicial 50 m.
+- Resultados cercanos se ordenan por distancia y se limitan a 20.
+- Al elegir un cercano se abre Destino y queda preparado Maps.
+- AndroidMaps está registrado en WebView.
+- MapsBridge abre com.google.android.apps.maps mediante google.navigation y tiene URL web de respaldo.
+- Workflow GitHub conserva assembleDebug.
+- versionCode 8 / versionName 1.0.2.

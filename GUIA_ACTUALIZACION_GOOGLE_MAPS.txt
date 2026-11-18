@@ -1,0 +1,9 @@
+RIEGO CERCA - GOOGLE MAPS CORREGIDO
+
+CAMBIO PRINCIPAL
+La app utiliza google.navigation:q=LATITUD,LONGITUD&mode=d y Android intenta abrir específicamente com.google.android.apps.maps. Si Google Maps no está instalado, se abre el navegador como alternativa.
+
+SI YA TIENES EL REPOSITORIO EN GITHUB
+Opción recomendada: sustituye todo el contenido del repositorio por esta carpeta actualizada.
+Después: Actions > Compilar APK Riego Cerca > Run workflow.
+Descarga el artefacto RiegoCerca-APK e instala RiegoCerca-debug.apk.

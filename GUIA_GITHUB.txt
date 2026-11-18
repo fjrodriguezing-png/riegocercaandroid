@@ -1,0 +1,9 @@
+1. github.com > New repository > cree riego-cerca-android vacío.
+2. Descomprima este ZIP.
+3. Suba TODO el contenido interior de RiegoCercaAndroid a la raíz del repositorio.
+4. Abra Actions y habilítelas si GitHub lo solicita.
+5. Abra Compilar APK Riego Cerca y pulse Run workflow.
+6. Espere la marca verde.
+7. Descargue el artefacto RiegoCerca-APK.
+8. Descomprímalo e instale RiegoCerca-debug.apk.
+9. En la app importe ELEMENTOS DE RIEGO PARA APP.xlsx. La importación se guarda.

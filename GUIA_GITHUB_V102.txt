@@ -1,0 +1,6 @@
+1. Sube el contenido INTERIOR de RiegoCercaAndroid_V102 a la raíz del repositorio.
+2. Comprueba .github/workflows/build-apk.yml.
+3. Commit changes.
+4. Actions > Compilar APK Riego Cerca 1.0.2 > Run workflow.
+5. Descarga Artifacts > RiegoCerca-1.0.2-APK.
+6. Instala RiegoCerca-1.0.2-debug.apk.

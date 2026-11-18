@@ -1,0 +1,23 @@
+RIEGO CERCA 1.0.2 - PROYECTO FINAL PARA GITHUB
+
+MEJORAS APLICADAS
+1. Google Maps: el botón llama a un puente Android nativo (MapsBridge) con latitud y longitud. Se intenta abrir com.google.android.apps.maps con google.navigation. Si Google Maps no está instalado, se usa la URL web oficial como alternativa.
+2. GitHub Actions: el workflow valida primero archivos, versión y código Maps; después compila assembleDebug y publica RiegoCerca-1.0.2-debug.apk.
+3. Seguridad de uso: no se abre Maps si no hay un destino con coordenadas GPS válidas. Riego Cerca permanece en segundo plano al abrir Maps.
+
+SUBIR A GITHUB
+1. Descomprime el ZIP.
+2. Entra en RiegoCercaAndroid_V102.
+3. Sube TODO el contenido interior a la raíz del repositorio.
+4. Comprueba que existen app/ y .github/workflows/build-apk.yml.
+5. Commit changes.
+6. Actions > Compilar APK Riego Cerca 1.0.2 > Run workflow.
+7. Al terminar en verde, descarga Artifacts > RiegoCerca-1.0.2-APK.
+8. Descomprime e instala RiegoCerca-1.0.2-debug.apk.
+
+PRUEBA EN EL MÓVIL
+1. Importa el Excel y busca un NOMBRE conocido.
+2. Verifica que la ficha muestra coordenadas GPS.
+3. Pulsa ABRIR EN GOOGLE MAPS.
+4. Debe abrir Google Maps con la navegación al punto seleccionado.
+5. Pulsa Atrás o usa Apps recientes: Riego Cerca debe seguir abierta.

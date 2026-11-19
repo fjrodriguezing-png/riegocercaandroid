@@ -1,0 +1,24 @@
+name: Aplicar splash Nova Limia y compilar APK
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Aplicar splash de 3 segundos
+        run: python aplicar_splash_v25.py
+      - uses: actions/setup-java@v5
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v6
+        with: {gradle-version: '8.9'}
+      - run: gradle --no-daemon clean assembleDebug
+      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-Splash-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-Splash-APK
+          path: CRNL-Splash-debug.apk
+          if-no-files-found: error

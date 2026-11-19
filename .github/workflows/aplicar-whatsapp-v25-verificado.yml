@@ -1,0 +1,31 @@
+name: Aplicar WhatsApp V25, comprobar y compilar
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Detectar V25, aplicar WhatsApp y comprobar
+        run: python aplicar_y_comprobar_whatsapp_v25.py
+      - name: Mostrar informe
+        run: cat whatsapp_patch_report.txt
+      - uses: actions/setup-java@v5
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v6
+        with: {gradle-version: '8.9'}
+      - name: Compilar APK
+        run: gradle --no-daemon clean assembleDebug
+      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-V26-WhatsApp-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-V26-WhatsApp-APK
+          path: CRNL-V26-WhatsApp-debug.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Informe-parche-WhatsApp
+          path: whatsapp_patch_report.txt

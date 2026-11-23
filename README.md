@@ -1,9 +1,13 @@
-# CRNL Integral
-Proyecto Android completo.
+# CRNL Integral 1.0.4
+Proyecto Android reconstruido con pantalla inicial animada de tres segundos y menú completo.
 
-## Compilar en GitHub
-1. Subir todo el contenido a la raiz del repositorio.
-2. Abrir Actions.
-3. Elegir Compilar APK CRNL Integral.
-4. Pulsar Run workflow.
-5. Descargar CRNL-Integral-APK desde Artifacts.
+## Menú
+- Importar Excel
+- Buscar elemento
+- Cercanos por GPS y radio
+- Google Maps
+- Google Earth
+- Aviso de incidencias por WhatsApp
+
+## Compilar
+Subir el contenido completo del proyecto a la raíz de un repositorio limpio y ejecutar Actions > Compilar APK CRNL Integral > Run workflow.

@@ -1,16 +1,2 @@
-PARCHE CRNL INTEGRAL COMPLETO
-
-Aplica en una sola compilacion:
-1. Splash de 3 segundos con la foto y titulo COMUNIDAD DE REGANTES NOVA LIMIA centrado.
-2. La MISMA foto permanece como fondo de la pantalla principal al desaparecer el splash.
-3. Mantiene/integra los accesos del elemento: WhatsApp (+34 615179537, NOMBRE, TIPO y enlace Google Maps) y Google Earth, ademas de Google Maps.
-
-Tambien corrige las corrupciones detectadas en el index.html pegado en el chat (XLSX y URL de Maps).
-
-Copia a la raiz del repositorio:
-- aplicar_crnl_integral.py
-- splash_nova_limia.jpg
-- .github/workflows/compilar-crnl-integral-completo.yml
-
-Despues ejecuta Actions > Compilar CRNL integral completo > Run workflow.
-No ejecutes despues los workflows antiguos de Splash, WhatsApp o Google Earth por separado.
+CRNL FINAL
+Incluye splash con splash_nova_limia.jpg 3 s, animacion de titulo, Google Maps, Google Earth, WhatsApp, importar datos, elementos por radio e icono de hidrante. No hay ic_launcher.xml duplicado.

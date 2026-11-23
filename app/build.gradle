@@ -1,4 +1,4 @@
 plugins { id 'com.android.application' }
 android { namespace 'es.riegocerca.maps'; compileSdk 35
- defaultConfig { applicationId 'es.riegocerca.maps'; minSdk 23; targetSdk 35; versionCode 5; versionName '1.0.5' }
+ defaultConfig { applicationId 'es.riegocerca.maps'; minSdk 23; targetSdk 35; versionCode 30; versionName '1.0.30' }
 }

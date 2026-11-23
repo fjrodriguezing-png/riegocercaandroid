@@ -1,7 +1,4 @@
-TRES CAMBIOS GOOGLE EARTH
-1. Nueva opcion 🌍 Google Earth en el menu principal.
-2. Al pulsar un elemento encontrado aparece 🌍 Ver este elemento en Google Earth, reutilizando sus coordenadas GPS.
-3. Android intenta abrir la app Google Earth (com.google.earth); si no esta instalada abre Earth web.
-
-Copia aplicar_google_earth_v25.py y .github/workflows/aplicar-google-earth-compilar.yml al repositorio y ejecuta el workflow.
-IMPORTANTE: para conservar tambien Splash + WhatsApp, aplica este parche sobre la misma rama/proyecto que ya contiene esas funciones, no sobre una copia antigua.
+Este parche esta adaptado al index.html real pegado en el chat.
+Corrige dos corrupciones del archivo: script XLSX convertido en enlace HTML y URL Maps convertida en etiqueta <a> dentro de JavaScript.
+Luego integra Splash 3 s, WhatsApp y Google Earth en el mismo archivo.
+Copia los 3 archivos y .github al repositorio. Ejecuta Actions > Corregir codigo actual y compilar integral.

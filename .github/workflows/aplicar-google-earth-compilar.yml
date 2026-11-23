@@ -1,0 +1,24 @@
+name: Añadir Google Earth y compilar CRNL
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Aplicar Google Earth y comprobar tres integraciones
+        run: python aplicar_google_earth_v25.py
+      - uses: actions/setup-java@v5
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v6
+        with: {gradle-version: '8.9'}
+      - run: gradle --no-daemon clean assembleDebug
+      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-Google-Earth-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-Google-Earth-APK
+          path: CRNL-Google-Earth-debug.apk
+          if-no-files-found: error

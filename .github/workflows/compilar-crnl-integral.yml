@@ -1,28 +1,53 @@
-name: Compilar CRNL completa Splash + WhatsApp + Icono
-on: {workflow_dispatch: {}}
-permissions: {contents: read}
+name: Compilar CRNL completa Splash + Fondo + WhatsApp + Icono
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - run: pip install pillow
-      - name: Aplicar Splash + WhatsApp juntos
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Pillow
+        run: pip install pillow
+
+      - name: Aplicar Splash + WhatsApp
         run: python aplicar_splash_whatsapp_v25.py
+
+      - name: Aplicar foto como fondo de la pantalla principal
+        run: python aplicar_fondo_principal.py
+
       - name: Aplicar icono full bleed
         run: python aplicar_icono_full.py
+
       - name: Comprobar que ninguna funcion se ha perdido
         run: python comprobar_final.py
+
       - uses: actions/setup-java@v5
-        with: {distribution: temurin, java-version: '17'}
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - uses: gradle/actions/setup-gradle@v6
-        with: {gradle-version: '8.9'}
+        with:
+          gradle-version: '8.9'
+
       - name: Compilar una unica APK final
         run: gradle --no-daemon clean assembleDebug
-      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-INTEGRAL-debug.apk
+
+      - name: Preparar APK final
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-INTEGRAL-debug.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: CRNL-INTEGRAL-APK

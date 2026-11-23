@@ -1,0 +1,39 @@
+name: Compilar CRNL integral completo
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Aplicar las 3 funciones sobre el codigo actual
+        run: python aplicar_crnl_integral.py
+      - name: Comprobar resultado integrado
+        run: |
+          grep -q 'id="appSplash"' app/src/main/assets/index.html
+          grep -q "url('splash_nova_limia.jpg')" app/src/main/assets/index.html
+          grep -q 'https://wa.me/34615179537' app/src/main/assets/index.html
+          grep -q 'id="earthMenu"' app/src/main/assets/index.html
+          grep -q 'id="elementActionEarth"' app/src/main/assets/index.html
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK unica
+        run: gradle --no-daemon clean assembleDebug
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-INTEGRAL-COMPLETO-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-INTEGRAL-COMPLETO-APK
+          path: CRNL-INTEGRAL-COMPLETO-debug.apk
+          if-no-files-found: error

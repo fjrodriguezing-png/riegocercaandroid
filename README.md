@@ -1,5 +1,9 @@
-# Riego Cerca Android 1.0.1
-Versión con apertura de Google Maps corregida mediante Intent nativo.
+# CRNL Integral
+Proyecto Android completo.
 
 ## Compilar en GitHub
-Sube el contenido de esta carpeta a la raíz del repositorio. Luego abre Actions > Compilar APK Riego Cerca > Run workflow. Descarga el artefacto RiegoCerca-APK.
+1. Subir todo el contenido a la raiz del repositorio.
+2. Abrir Actions.
+3. Elegir Compilar APK CRNL Integral.
+4. Pulsar Run workflow.
+5. Descargar CRNL-Integral-APK desde Artifacts.

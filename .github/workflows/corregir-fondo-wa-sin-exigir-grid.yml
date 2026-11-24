@@ -1,0 +1,24 @@
+name: Corregir fondo + WhatsApp sin exigir menu grid
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Corregir y verificar solo los dos fallos
+        run: python corregir_fondo_wa_sin_exigir_grid.py
+      - uses: actions/setup-java@v5
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v6
+        with: {gradle-version: '8.9'}
+      - run: gradle --no-daemon clean assembleDebug
+      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-FONDO-WA-FIX-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-FONDO-WA-FIX-APK
+          path: CRNL-FONDO-WA-FIX-debug.apk
+          if-no-files-found: error

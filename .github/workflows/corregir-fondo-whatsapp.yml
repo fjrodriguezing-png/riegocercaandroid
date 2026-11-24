@@ -1,0 +1,32 @@
+name: Corregir SOLO fondo y WhatsApp del menu
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - name: Corregir exactamente los dos fallos
+     run: python corregir_fondo_y_menu_whatsapp.py
+   - name: Verificar antes de compilar
+     run: |
+       grep -q 'id="mainBackgroundImage"' app/src/main/assets/index.html
+       grep -q 'id="elementActionWhatsApp"' app/src/main/assets/index.html
+       grep -q 'id="appSplash"' app/src/main/assets/index.html
+       grep -q 'id="earthMenu"' app/src/main/assets/index.html
+       python - <<'PY'
+       from pathlib import Path
+       s=Path('app/src/main/assets/index.html').read_text()
+       a=s.index('<div id="menuPanel"');b=s.index('</div>',a);m=s[a:b].lower()
+       assert 'whatsapp' not in m
+       PY
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-FONDO-WA-CORREGIDO-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-FONDO-WA-CORREGIDO-APK, path: CRNL-FONDO-WA-CORREGIDO-debug.apk}

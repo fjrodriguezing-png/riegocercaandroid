@@ -1,0 +1,2 @@
+PROYECTO RECONSTRUIDO COMPLETO Y VERIFICADO.
+Validado: Splash 3s, mismo fondo, menu 2 columnas movil, WhatsApp solo contextual, radio manual, lista ordenada, Maps, Earth, icono arqueta unico, C.R.N.L., JS sintacticamente valido.

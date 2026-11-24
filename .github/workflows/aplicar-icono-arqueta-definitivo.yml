@@ -1,0 +1,26 @@
+name: Aplicar icono definitivo arqueta CRNL
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: pip install pillow
+   - run: python aplicar_icono_dibujo_definitivo.py
+   - name: Comprobar que no queda icono antiguo
+     run: |
+      grep -q '@mipmap/ic_crnl_arqueta_v3' app/src/main/AndroidManifest.xml
+      test -f app/src/main/res/mipmap-xxxhdpi/ic_crnl_arqueta_v3.png
+      ! find app/src/main/res -name 'ic_launcher*' | grep -q .
+      ! find app/src/main/res -name 'ic_crnl_foto_v2*' | grep -q .
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-ICONO-ARQUETA-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-ICONO-ARQUETA-APK, path: CRNL-ICONO-ARQUETA-debug.apk}

@@ -1,2 +1,5 @@
-CRNL FINAL
-Incluye splash con splash_nova_limia.jpg 3 s, animacion de titulo, Google Maps, Google Earth, WhatsApp, importar datos, elementos por radio e icono de hidrante. No hay ic_launcher.xml duplicado.
+ESTE PARCHE HACE SOLO LO ULTIMO QUE HAS PEDIDO:
+1. Fuerza como unico icono el dibujo de la arqueta con hierba, tapa verde e hidrante azul. Recurso nuevo: ic_crnl_arqueta_final.
+2. Fuerza el menu hamburguesa como cuadrados: 2 columnas en movil y 3 en pantalla ancha.
+
+NO modifica funciones, botones, WhatsApp, Earth, Maps, Splash, fondo ni MainActivity. Solo incrementa versionCode para compilar una actualización nueva.

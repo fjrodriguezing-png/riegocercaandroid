@@ -1,7 +1,7 @@
-CORRECCION: ESTE PARCHE NO CONTIENE NINGUNA IMAGEN DE ICONO.
-No genera, borra, renombra ni cambia ningun recurso de icono.
-No modifica AndroidManifest.xml.
-Calcula SHA-256 del manifiesto y de todos los recursos con icon/launcher en el nombre antes y despues; si cambia uno, el workflow falla.
-Hace solo:
-- menu hamburguesa en cuadrados (2 columnas movil, 3 ancho);
-- quitar WhatsApp del menu principal.
+CORRECCION DEFINITIVA DE LOS DOS FALLOS, SIN TOCAR ICONO.
+
+FONDO: en vez de remover el splash y crear otro fondo, a los 3 segundos se eliminan SOLO el titulo y la sombra. La MISMA imagen/elemento del splash permanece fija debajo de la interfaz. Por tanto no puede cambiar el recorte ni moverse entre splash y principal.
+
+WHATSAPP: se elimina cualquier boton WhatsApp dentro de la section de menuPanel usando coincidencia por texto/id/data-menu. Se exige que elementActionWhatsApp siga en Elementos por radio.
+
+ICONO: AndroidManifest y cualquier recurso cuyo nombre contenga icon/launcher se bloquean por SHA-256. Si cambia un byte, el workflow falla.

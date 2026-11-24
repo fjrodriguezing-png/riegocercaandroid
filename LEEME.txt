@@ -1,7 +1,6 @@
-CORRIGE EL ERROR VISTO EN LA CAPTURA.
-El workflow anterior fallaba solo porque exigia detectar el CSS de menu-cuadricula. Esta version NO bloquea la compilacion por el diseño actual del menu.
-Comprueba unicamente:
-- mismo splash convertido en fondo sin cambiar encuadre;
-- WhatsApp fuera del menu principal;
-- elementActionWhatsApp conservado;
-- icono y AndroidManifest byte a byte intactos.
+ESTE PARCHE NO TOCA EL ICONO.
+Corrige exactamente:
+1. Fondo principal: usa un IMG fijo 100vw x 100vh con splash_nova_limia.jpg, object-fit cover y center center, por lo que no depende del scroll ni del background de body.
+2. Menu: añade al FINAL del HEAD un CSS con !important que fuerza display:grid, 2 columnas en movil y 3 en pantalla ancha. Al ir al final gana a todos los estilos anteriores.
+3. WhatsApp se elimina del menu principal y se exige elementActionWhatsApp dentro de acciones de elementos.
+AndroidManifest y todos los recursos icon/launcher se comprueban por SHA-256 y deben quedar byte-identicos.

@@ -1,5 +1,3 @@
-ESTE PARCHE HACE SOLO LO ULTIMO QUE HAS PEDIDO:
-1. Fuerza como unico icono el dibujo de la arqueta con hierba, tapa verde e hidrante azul. Recurso nuevo: ic_crnl_arqueta_final.
-2. Fuerza el menu hamburguesa como cuadrados: 2 columnas en movil y 3 en pantalla ancha.
-
-NO modifica funciones, botones, WhatsApp, Earth, Maps, Splash, fondo ni MainActivity. Solo incrementa versionCode para compilar una actualización nueva.
+Este parche hace UNA sola cosa: quita WhatsApp del menu hamburguesa principal.
+No toca icono, menu visual, fondo, splash, Google Earth, Google Maps ni MainActivity.
+Comprueba obligatoriamente que elementActionWhatsApp siga existiendo para los elementos encontrados por radio.

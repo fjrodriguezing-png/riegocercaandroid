@@ -1,3 +1,7 @@
-Este parche hace UNA sola cosa: quita WhatsApp del menu hamburguesa principal.
-No toca icono, menu visual, fondo, splash, Google Earth, Google Maps ni MainActivity.
-Comprueba obligatoriamente que elementActionWhatsApp siga existiendo para los elementos encontrados por radio.
+CORRECCION: ESTE PARCHE NO CONTIENE NINGUNA IMAGEN DE ICONO.
+No genera, borra, renombra ni cambia ningun recurso de icono.
+No modifica AndroidManifest.xml.
+Calcula SHA-256 del manifiesto y de todos los recursos con icon/launcher en el nombre antes y despues; si cambia uno, el workflow falla.
+Hace solo:
+- menu hamburguesa en cuadrados (2 columnas movil, 3 ancho);
+- quitar WhatsApp del menu principal.

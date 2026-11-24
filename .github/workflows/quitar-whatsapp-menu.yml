@@ -1,0 +1,26 @@
+name: Quitar WhatsApp SOLO del menu principal
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: python quitar_whatsapp_menu_principal.py
+   - name: Verificar antes de compilar
+     run: |
+      grep -q 'id="elementActionWhatsApp"' app/src/main/assets/index.html
+      python - <<'PY'
+      from pathlib import Path
+      s=Path('app/src/main/assets/index.html').read_text();a=s.index('<div id="menuPanel"');b=s.index('</div>',a);assert 'whatsapp' not in s[a:b].lower()
+      PY
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-SIN-WA-MENU-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-SIN-WA-MENU-APK, path: CRNL-SIN-WA-MENU-debug.apk}

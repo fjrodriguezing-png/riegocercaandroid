@@ -1,0 +1,27 @@
+name: Aplicar SOLO icono definitivo y menu cuadrados
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: pip install pillow
+   - name: Aplicar solo dos cambios
+     run: python aplicar_solo_icono_menu.py
+   - name: Verificar icono y menu
+     run: |
+      grep -q '@mipmap/ic_crnl_arqueta_final' app/src/main/AndroidManifest.xml
+      test -f app/src/main/res/mipmap-xxxhdpi/ic_crnl_arqueta_final.png
+      grep -q 'grid-template-columns:repeat(2,minmax(0,1fr))!important' app/src/main/assets/index.html
+      ! find app/src/main/res -name 'ic_launcher*' | grep -q .
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-ICONO-MENU-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-ICONO-MENU-APK, path: CRNL-ICONO-MENU-debug.apk}

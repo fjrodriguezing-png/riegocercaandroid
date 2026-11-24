@@ -1,0 +1,29 @@
+name: Eliminar icono_crnl_full.png
+on: {workflow_dispatch: {}}
+permissions:
+  contents: write
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Eliminar archivo antiguo
+        run: python eliminar_icono_crnl_full.py
+      - name: Comprobar cambios
+        run: git status --short
+      - name: Guardar eliminación en el repositorio
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "icono_crnl_full.png ya estaba eliminado."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Eliminar icono_crnl_full.png antiguo"
+          git push

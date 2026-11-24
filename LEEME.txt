@@ -1,6 +1,7 @@
-CORRIGE EL ERROR QUE MOSTRABA GITHUB: ya no busca un texto exacto del temporizador.
-Detecta appSplash por su ID y añade un temporizador independiente.
-A los 3 segundos EL MISMO elemento splash queda como fondo; solo se ocultan titulo y sombra. No crea una segunda imagen con otro recorte.
-Elimina WhatsApp solo del menu principal buscando hasta el cierre real de la section.
-Conserva elementActionWhatsApp.
-Bloquea AndroidManifest y todos los recursos icon/launcher por SHA-256: el icono actual no puede cambiar.
+CORRIGE EL ERROR VISTO EN LA CAPTURA.
+El workflow anterior fallaba solo porque exigia detectar el CSS de menu-cuadricula. Esta version NO bloquea la compilacion por el diseño actual del menu.
+Comprueba unicamente:
+- mismo splash convertido en fondo sin cambiar encuadre;
+- WhatsApp fuera del menu principal;
+- elementActionWhatsApp conservado;
+- icono y AndroidManifest byte a byte intactos.

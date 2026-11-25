@@ -1,0 +1,29 @@
+name: CRNL IMPORTACION SIN CUELGUE
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  timeout-minutes: 30
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - name: Aplicar importacion asíncrona
+     run: python aplicar_importacion_sin_cuelgue.py
+   - name: Verificar ANTES de Gradle
+     run: |
+      grep -q 'new Thread' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'new ImportBridge' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'NativeTabularImporter' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'id="importBtn"' app/src/main/assets/index.html
+      grep -q 'receiveImportError' app/src/main/assets/index.html
+      echo 'OK IMPORTACION ASINCRONA'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-IMPORT-SIN-CUELGUE-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-IMPORT-SIN-CUELGUE-APK, path: CRNL-IMPORT-SIN-CUELGUE-debug.apk, if-no-files-found: error}

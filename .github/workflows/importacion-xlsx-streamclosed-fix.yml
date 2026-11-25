@@ -1,0 +1,28 @@
+name: CRNL XLSX FIX STREAM CLOSED
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  timeout-minutes: 30
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - name: Aplicar correccion Stream closed
+     run: python aplicar_xlsx_streaming_streamclosed_fix.py
+   - name: Verificar ANTES de Gradle
+     run: |
+      grep -q 'ByteArrayInputStream(so.toByteArray())' app/src/main/java/es/riegocerca/maps/XlsxStreamingImporter.java
+      grep -q 'XlsxStreamingImporter' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'new Thread' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'receiveXlsxRows' app/src/main/assets/index.html
+      echo 'OK: Stream closed corregido; XLSX streaming conectado'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-XLSX-STREAMCLOSED-FIX-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-XLSX-STREAMCLOSED-FIX-APK, path: CRNL-XLSX-STREAMCLOSED-FIX-debug.apk, if-no-files-found: error}

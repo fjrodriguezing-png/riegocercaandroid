@@ -1,0 +1,28 @@
+name: Instalar paquete unico importacion y compilar
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: python aplicar_paquete_importacion.py
+   - name: Verificar antes de Gradle
+     run: |
+      test -f app/src/main/java/es/riegocerca/maps/MainActivity.java
+      test -f app/src/main/java/es/riegocerca/maps/ImportBridge.java
+      test -f app/src/main/java/es/riegocerca/maps/NativeTabularImporter.java
+      grep -q 'AndroidImport' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'receiveImportedRows' app/src/main/assets/index.html
+      ! grep -q 'cdn.jsdelivr.net/npm/xlsx' app/src/main/assets/index.html
+      echo 'PAQUETE IMPORTACION: OK'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-IMPORTACION-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-IMPORTACION-APK, path: CRNL-IMPORTACION-debug.apk}

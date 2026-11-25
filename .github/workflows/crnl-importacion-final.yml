@@ -1,0 +1,48 @@
+name: CRNL IMPORTACION FINAL
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Descargar proyecto actual
+        uses: actions/checkout@v6
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Aplicar importador autosuficiente
+        run: python aplicar_importacion_completa.py
+      - name: COMPROBAR antes de Gradle
+        run: |
+          echo '=== COMPROBACION IMPORTACION ==='
+          grep -q 'AndroidImport.importFile' app/src/main/assets/index.html
+          grep -q 'receiveImportedRows' app/src/main/assets/index.html
+          grep -q 'class ImportBridge' app/src/main/java/es/riegocerca/maps/MainActivity.java
+          grep -q 'parseXlsx' app/src/main/java/es/riegocerca/maps/MainActivity.java
+          grep -q 'parseCsv' app/src/main/java/es/riegocerca/maps/MainActivity.java
+          grep -q 'r==IMPORT' app/src/main/java/es/riegocerca/maps/MainActivity.java
+          ! grep -q 'cdn.jsdelivr.net/npm/xlsx' app/src/main/assets/index.html
+          echo 'OK: importador Android + XLSX + CSV + JavaScript conectados'
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK
+        run: gradle --no-daemon clean assembleDebug
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-IMPORTACION-FINAL-debug.apk
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-IMPORTACION-FINAL-APK
+          path: CRNL-IMPORTACION-FINAL-debug.apk
+          if-no-files-found: error

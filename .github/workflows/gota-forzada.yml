@@ -1,0 +1,54 @@
+name: CRNL GOTA MENU FORZADA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Aplicar gota de agua
+        run: python aplicar_gota_forzada.py
+
+      - name: Verificar gota antes de Gradle
+        run: |
+          grep -q 'id="crnlMenuDrop"' app/src/main/assets/index.html
+          grep -q '💧' app/src/main/assets/index.html
+          grep -q 'id="crnlMenuDropStyle"' app/src/main/assets/index.html
+          echo "OK: GOTA DE AGUA PRESENTE EN menuBtn"
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+
+      - name: Compilar APK
+        run: gradle --no-daemon clean assembleDebug
+
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-GOTA-FORZADA-debug.apk
+
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-GOTA-FORZADA-APK
+          path: CRNL-GOTA-FORZADA-debug.apk
+          if-no-files-found: error

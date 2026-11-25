@@ -1,0 +1,27 @@
+name: CRNL ACCIONES RESULTADOS RADIO
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: python aplicar_acciones_resultados_radio.py
+   - name: Verificar antes de Gradle
+     run: |
+      grep -q 'crnlResultActionsFixV1' app/src/main/assets/index.html
+      grep -q 'crnlResultMaps' app/src/main/assets/index.html
+      grep -q 'crnlResultEarth' app/src/main/assets/index.html
+      grep -q 'crnlResultWhatsApp' app/src/main/assets/index.html
+      grep -q 'wa.me/34615179537' app/src/main/assets/index.html
+      echo 'ACCIONES DE RESULTADOS: OK'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-ACCIONES-RADIO-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-ACCIONES-RADIO-APK, path: CRNL-ACCIONES-RADIO-debug.apk, if-no-files-found: error}

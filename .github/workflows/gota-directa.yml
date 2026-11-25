@@ -1,0 +1,63 @@
+name: CRNL GOTA DIRECTA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v6
+      - name: Cambiar boton menu por gota
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('app/src/main/assets/index.html')
+          if not p.exists():
+              raise SystemExit('Falta app/src/main/assets/index.html')
+          s=p.read_text(encoding='utf-8')
+          pattern=r'(<button\b[^>]*id=["\']menuBtn["\'][^>]*>)(.*?)(</button>)'
+          m=re.search(pattern,s,re.S|re.I)
+          if not m:
+              raise SystemExit('No se encontro menuBtn')
+          opening=m.group(1)
+          if 'aria-label=' in opening:
+              opening=re.sub(r'aria-label=["\'][^"\']*["\']','aria-label="Abrir menú"',opening,flags=re.I)
+          else:
+              opening=opening[:-1]+' aria-label="Abrir menú">'
+          s=s[:m.start()]+opening+'<span id="crnlMenuDrop" aria-hidden="true">💧</span></button>'+s[m.end():]
+          css='''<style id="crnlMenuDropStyle">#menuBtn{width:54px!important;height:54px!important;min-width:54px!important;padding:0!important;margin:0!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(255,255,255,.18)!important;border:1px solid rgba(255,255,255,.38)!important}#menuBtn span:not(#crnlMenuDrop){display:none!important}#crnlMenuDrop{display:block!important;width:auto!important;height:auto!important;background:transparent!important;margin:0!important;padding:0!important;font-size:36px!important;line-height:1!important;opacity:1!important;visibility:visible!important;transform:none!important}</style>'''
+          s=re.sub(r'<style id="crnlMenuDropStyle">.*?</style>','',s,flags=re.S)
+          s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s,encoding='utf-8')
+          print('OK: gota instalada')
+          PY
+      - name: Verificar gota antes de Gradle
+        run: |
+          grep -q 'id="crnlMenuDrop"' app/src/main/assets/index.html
+          grep -q '💧' app/src/main/assets/index.html
+          grep -q 'id="crnlMenuDropStyle"' app/src/main/assets/index.html
+          echo 'OK: GOTA PRESENTE'
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK
+        run: gradle --no-daemon clean assembleDebug
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-GOTA-DIRECTA-debug.apk
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-GOTA-DIRECTA-APK
+          path: CRNL-GOTA-DIRECTA-debug.apk
+          if-no-files-found: error

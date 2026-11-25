@@ -1,0 +1,30 @@
+name: CRNL TODO EN UNA APK
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  timeout-minutes: 30
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - name: Aplicar TODAS las funciones juntas
+     run: python aplicar_crnl_runtime_final.py
+   - name: Verificar TODO antes de Gradle
+     run: |
+      grep -q 'ByteArrayInputStream(so.toByteArray())' app/src/main/java/es/riegocerca/maps/XlsxStreamingImporter.java
+      grep -q 'receiveXlsxRows' app/src/main/assets/index.html
+      grep -q 'crnlReturnOpenMenu' app/src/main/assets/index.html
+      grep -q 'crnlFinalRuntimeV1' app/src/main/assets/index.html
+      grep -q 'crnlFinalActions' app/src/main/assets/index.html
+      grep -q 'crnlFWa' app/src/main/assets/index.html
+      echo 'OK: XLSX + MENU + RADIO + MAPS + EARTH + WHATSAPP JUNTOS'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-TODO-EN-UNA-APK-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-TODO-EN-UNA-APK, path: CRNL-TODO-EN-UNA-APK-debug.apk, if-no-files-found: error}

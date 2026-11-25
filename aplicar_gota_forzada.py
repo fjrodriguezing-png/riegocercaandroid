@@ -1,112 +1,75 @@
-from pathlib import Path
-import re
+name: CRNL GOTA MENU FORZADA
 
-p = Path("app/src/main/assets/index.html")
+on:
+  workflow_dispatch:
 
-if not p.exists():
-    raise SystemExit("No existe app/src/main/assets/index.html")
+permissions:
+  contents: read
 
-h = p.read_text(encoding="utf-8")
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
-pattern = r'(<button\b[^>]*id=["\']menuBtn["\'][^>]*>)(.*?)(</button>)'
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v6
 
-m = re.search(pattern, h, re.S | re.I)
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-if not m:
-    raise SystemExit("No se encontró el botón menuBtn")
+      - name: Localizar y aplicar gota de agua
+        run: |
+          echo "Directorio actual:"
+          pwd
 
-open_tag = m.group(1)
+          echo "Buscando aplicar_gota_forzada.py..."
+          SCRIPT="$(find . -type f -name 'aplicar_gota_forzada.py' -print -quit)"
 
-if "aria-label=" in open_tag:
-    open_tag = re.sub(
-        r'aria-label=["\'][^"\']*["\']',
-        'aria-label="Abrir menú"',
-        open_tag
-    )
+          if [ -z "$SCRIPT" ]; then
+            echo "ERROR: no encuentro aplicar_gota_forzada.py"
+            echo "Archivos disponibles:"
+            find . -maxdepth 5 -type f | sort
+            exit 1
+          fi
 
-new_button = (
-    open_tag
-    + '<span id="crnlMenuDrop" aria-hidden="true">💧</span>'
-    + "</button>"
-)
+          echo "Encontrado en: $SCRIPT"
+          python "$SCRIPT"
 
-h = h[:m.start()] + new_button + h[m.end():]
+      - name: Verificar gota ANTES de Gradle
+        run: |
+          test -f app/src/main/assets/index.html
 
-style = """
-<style id="crnlMenuDropStyle">
+          grep -q 'id="menuBtn"' app/src/main/assets/index.html
+          grep -q 'id="crnlMenuDrop"' app/src/main/assets/index.html
+          grep -q '💧' app/src/main/assets/index.html
+          grep -q 'id="crnlMenuDropStyle"' app/src/main/assets/index.html
 
-#menuBtn {
-    width: 54px !important;
-    height: 54px !important;
-    min-width: 54px !important;
-    padding: 0 !important;
-    margin: 0 !important;
+          echo "OK: gota de agua instalada en menuBtn"
 
-    border-radius: 50% !important;
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
 
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.9'
 
-    background: rgba(255,255,255,.18) !important;
+      - name: Compilar APK
+        run: gradle --no-daemon clean assembleDebug
 
-    border:
-        1px solid rgba(255,255,255,.38) !important;
+      - name: Preparar APK
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk CRNL-GOTA-FORZADA-debug.apk
 
-    box-shadow:
-        0 5px 16px rgba(0,0,0,.22) !important;
-}
-
-#menuBtn span:not(#crnlMenuDrop) {
-    display: none !important;
-}
-
-#crnlMenuDrop {
-    display: block !important;
-
-    width: auto !important;
-    height: auto !important;
-
-    background: transparent !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: 36px !important;
-    line-height: 1 !important;
-
-    opacity: 1 !important;
-    visibility: visible !important;
-
-    transform: none !important;
-}
-
-@media(max-width:390px) {
-
-    #menuBtn {
-        width: 50px !important;
-        height: 50px !important;
-        min-width: 50px !important;
-    }
-
-    #crnlMenuDrop {
-        font-size: 33px !important;
-    }
-}
-
-</style>
-"""
-
-h = re.sub(
-    r'<style id="crnlMenuDropStyle">.*?</style>',
-    "",
-    h,
-    flags=re.S
-)
-
-h = h.replace("</head>", style + "</head>")
-
-p.write_text(h, encoding="utf-8")
-
-print("OK: botón del menú sustituido por 💧")
-
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-GOTA-FORZADA-APK
+          path: CRNL-GOTA-FORZADA-debug.apk
+          if-no-files-found: error

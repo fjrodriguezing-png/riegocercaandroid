@@ -1,0 +1,27 @@
+name: CRNL IMPORTACION XLSX STREAMING
+on: {workflow_dispatch: {}}
+permissions: {contents: read}
+jobs:
+ build:
+  runs-on: ubuntu-latest
+  timeout-minutes: 30
+  steps:
+   - uses: actions/checkout@v6
+   - uses: actions/setup-python@v5
+     with: {python-version: '3.12'}
+   - run: python aplicar_xlsx_streaming.py
+   - name: Verificar XLSX antes de Gradle
+     run: |
+      grep -q 'XlsxStreamingImporter' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'new Thread' app/src/main/java/es/riegocerca/maps/MainActivity.java
+      grep -q 'id="xlsxBtn"' app/src/main/assets/index.html
+      grep -q 'receiveXlsxRows' app/src/main/assets/index.html
+      echo 'XLSX STREAMING: OK'
+   - uses: actions/setup-java@v5
+     with: {distribution: temurin, java-version: '17'}
+   - uses: gradle/actions/setup-gradle@v6
+     with: {gradle-version: '8.9'}
+   - run: gradle --no-daemon clean assembleDebug
+   - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-XLSX-STREAMING-debug.apk
+   - uses: actions/upload-artifact@v4
+     with: {name: CRNL-XLSX-STREAMING-APK, path: CRNL-XLSX-STREAMING-debug.apk, if-no-files-found: error}

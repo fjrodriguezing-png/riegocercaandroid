@@ -1,5 +1,2 @@
-PARCHE CONSOLIDADO. Aplica juntos, sobre el proyecto actual:
-- Volver al menú en Datos, Destino y Elementos por radio.
-- Buscar elementos por radio con GPS success/error/options y mensajes visibles.
-- Iconos XLSX, Destino y Google Earth al 100% de cada baldosa.
-No modifica la importación Excel, Maps, Earth, WhatsApp, splash ni fondo.
+V2 corrige el fallo del parche anterior: la comprobacion global detectaba el primer boton Volver al menu y evitaba insertar los otros dos. Esta version inserta y verifica por separado Datos, Destino y Elementos por radio.
+Tambien conserva la correccion del GPS y los iconos al 100% de las baldosas.

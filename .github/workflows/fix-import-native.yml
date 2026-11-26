@@ -1,28 +1,45 @@
 name: Corregir importacion Excel CSV nativa
-on: {workflow_dispatch: {}}
-permissions: {contents: read}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Aplicar correccion de importacion
+
+      - name: Verificar y aplicar importacion nativa sin tocar el menu
         run: python aplicar_importacion_nativa.py
-      - uses: actions/setup-java@v5
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - run: gradle --no-daemon clean assembleDebug
-      - run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-IMPORT-FIX-debug.apk
-      - uses: actions/upload-artifact@v4
+
+      - name: Compilar APK limpio
+        run: gradle --no-daemon clean assembleDebug
+
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-IMPORT-FIX-debug.apk
+
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
         with:
           name: CRNL-IMPORT-FIX-APK
           path: CRNL-IMPORT-FIX-debug.apk
-          if-no-files-found: error

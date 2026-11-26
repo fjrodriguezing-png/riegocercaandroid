@@ -1,3 +1,188 @@
 package es.riegocerca.maps;
-import android.content.*;import android.database.Cursor;import android.net.Uri;import android.provider.OpenableColumns;import org.json.*;import org.w3c.dom.*;import javax.xml.parsers.*;import java.io.*;import java.text.Normalizer;import java.util.*;import java.util.zip.*;
-public class NativeTabularImporter{private final Context c;public NativeTabularImporter(Context c){this.c=c;}public JSONArray read(Uri u)throws Exception{return fileName(u).toLowerCase(Locale.ROOT).endsWith(".csv")?csv(u):xlsx(u);}String fileName(Uri u){String n="";try(Cursor q=c.getContentResolver().query(u,null,null,null,null)){if(q!=null&&q.moveToFirst()){int i=q.getColumnIndex(OpenableColumns.DISPLAY_NAME);if(i>=0)n=q.getString(i);}}return n;}JSONArray csv(Uri u)throws Exception{BufferedReader br=new BufferedReader(new InputStreamReader(c.getContentResolver().openInputStream(u),"UTF-8"));String h=br.readLine();if(h==null)throw new Exception("CSV vacío");char s=h.contains(";")?';':',';String[] cols=h.split(java.util.regex.Pattern.quote(String.valueOf(s)),-1);JSONArray a=new JSONArray();String l;while((l=br.readLine())!=null){JSONObject o=row(cols,l.split(java.util.regex.Pattern.quote(String.valueOf(s)),-1));if(o!=null)a.put(o);}return a;}JSONObject row(String[] c,String[] v)throws Exception{String tipo="",nombre="",xs="",ys="";for(int i=0;i<c.length&&i<v.length;i++){String k=norm(c[i]),x=v[i].trim();if(k.equals("TIPO"))tipo=x;else if(k.equals("NOMBRE"))nombre=x;else if(k.equals("X")||k.equals("COORDENADAX"))xs=x;else if(k.equals("Y")||k.equals("COORDENADAY"))ys=x;}if(nombre.isEmpty()||xs.isEmpty()||ys.isEmpty())return null;return new JSONObject().put("type",tipo).put("name",nombre).put("x",Double.parseDouble(xs.replace(',','.'))).put("y",Double.parseDouble(ys.replace(',','.')));}String norm(String s){return Normalizer.normalize(s==null?"":s,Normalizer.Form.NFD).replaceAll("\\p{M}","").replaceAll("[^A-Za-z0-9]","").toUpperCase(Locale.ROOT);}JSONArray xlsx(Uri u)throws Exception{File t=File.createTempFile("crnl_",".xlsx",c.getCacheDir());try(InputStream in=c.getContentResolver().openInputStream(u);OutputStream out=new FileOutputStream(t)){byte[] b=new byte[8192];int n;while((n=in.read(b))>0)out.write(b,0,n);}Map<String,byte[]> z=new HashMap<>();try(ZipInputStream in=new ZipInputStream(new FileInputStream(t))){ZipEntry e;while((e=in.getNextEntry())!=null){String n=e.getName();if(n.equals("xl/sharedStrings.xml")||n.equals("xl/worksheets/sheet1.xml")){ByteArrayOutputStream o=new ByteArrayOutputStream();byte[] b=new byte[4096];int q;while((q=in.read(b))>0)o.write(b,0,q);z.put(n,o.toByteArray());}}}List<String> ss=shared(z.get("xl/sharedStrings.xml"));byte[] sh=z.get("xl/worksheets/sheet1.xml");if(sh==null)throw new Exception("No se encontró la primera hoja");Document d=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(sh));NodeList rs=d.getElementsByTagName("row");List<List<String>> rr=new ArrayList<>();for(int ri=0;ri<rs.getLength();ri++){NodeList cells=((Element)rs.item(ri)).getElementsByTagName("c");Map<Integer,String> map=new HashMap<>();int mx=-1;for(int ci=0;ci<cells.getLength();ci++){Element ce=(Element)cells.item(ci);int idx=col(ce.getAttribute("r"));String val="";NodeList vn=ce.getElementsByTagName("v");if(vn.getLength()>0)val=vn.item(0).getTextContent();if("s".equals(ce.getAttribute("t"))&&!val.isEmpty())val=ss.get(Integer.parseInt(val));map.put(idx,val);mx=Math.max(mx,idx);}List<String> line=new ArrayList<>();for(int i=0;i<=mx;i++)line.add(map.getOrDefault(i,""));rr.add(line);}if(rr.isEmpty())throw new Exception("Excel sin filas");String[] cols=rr.get(0).toArray(new String[0]);JSONArray a=new JSONArray();for(int i=1;i<rr.size();i++){JSONObject o=row(cols,rr.get(i).toArray(new String[0]));if(o!=null)a.put(o);}t.delete();return a;}List<String> shared(byte[] b)throws Exception{List<String> o=new ArrayList<>();if(b==null)return o;Document d=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(b));NodeList n=d.getElementsByTagName("si");for(int i=0;i<n.getLength();i++)o.add(n.item(i).getTextContent());return o;}int col(String r){int n=0;for(int i=0;i<r.length()&&Character.isLetter(r.charAt(i));i++)n=n*26+(Character.toUpperCase(r.charAt(i))-'A'+1);return n-1;}}
+
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.text.Normalizer;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+public class NativeTabularImporter {
+    private final Context context;
+    public NativeTabularImporter(Context context) { this.context = context; }
+
+    public JSONArray read(Uri uri) throws Exception {
+        String name = fileName(uri).toLowerCase(Locale.ROOT);
+        if (name.endsWith(".csv")) return csv(uri);
+        if (name.endsWith(".xlsx")) return xlsx(uri);
+        throw new Exception("Formato no compatible. Selecciona un archivo .xlsx o .csv");
+    }
+
+    private String fileName(Uri uri) {
+        String name = "";
+        try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (index >= 0) name = cursor.getString(index);
+            }
+        } catch (Exception ignored) {}
+        return name == null ? "" : name;
+    }
+
+    private JSONArray csv(Uri uri) throws Exception {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(context.getContentResolver().openInputStream(uri), "UTF-8"))) {
+            List<String[]> lines = new ArrayList<>();
+            String line;
+            char sep = ';';
+            while ((line = br.readLine()) != null) {
+                if (lines.isEmpty()) sep = line.contains(";") ? ';' : ',';
+                lines.add(splitCsv(line, sep));
+            }
+            return rowsToJson(lines);
+        }
+    }
+
+    private String[] splitCsv(String line, char sep) {
+        List<String> values = new ArrayList<>();
+        StringBuilder value = new StringBuilder();
+        boolean quoted = false;
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (ch == '"') {
+                if (quoted && i + 1 < line.length() && line.charAt(i + 1) == '"') { value.append('"'); i++; }
+                else quoted = !quoted;
+            } else if (ch == sep && !quoted) { values.add(value.toString()); value.setLength(0); }
+            else value.append(ch);
+        }
+        values.add(value.toString());
+        return values.toArray(new String[0]);
+    }
+
+    private JSONArray xlsx(Uri uri) throws Exception {
+        File temp = File.createTempFile("crnl_", ".xlsx", context.getCacheDir());
+        try (InputStream in = context.getContentResolver().openInputStream(uri); OutputStream out = new FileOutputStream(temp)) {
+            if (in == null) throw new Exception("No se pudo abrir el Excel");
+            byte[] buffer = new byte[8192]; int n;
+            while ((n = in.read(buffer)) > 0) out.write(buffer, 0, n);
+        }
+
+        Map<String, byte[]> entries = new HashMap<>();
+        try (ZipInputStream zip = new ZipInputStream(new FileInputStream(temp))) {
+            ZipEntry entry;
+            while ((entry = zip.getNextEntry()) != null) {
+                String name = entry.getName();
+                if (name.equals("xl/sharedStrings.xml") || name.equals("xl/worksheets/sheet1.xml")) {
+                    ByteArrayOutputStream data = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[4096]; int n;
+                    while ((n = zip.read(buffer)) > 0) data.write(buffer, 0, n);
+                    entries.put(name, data.toByteArray());
+                }
+            }
+        } finally { temp.delete(); }
+
+        List<String> shared = sharedStrings(entries.get("xl/sharedStrings.xml"));
+        byte[] sheet = entries.get("xl/worksheets/sheet1.xml");
+        if (sheet == null) throw new Exception("No se encontró la primera hoja del Excel");
+
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(sheet));
+        NodeList xmlRows = doc.getElementsByTagName("row");
+        List<String[]> lines = new ArrayList<>();
+        for (int r = 0; r < xmlRows.getLength(); r++) {
+            NodeList cells = ((Element) xmlRows.item(r)).getElementsByTagName("c");
+            Map<Integer, String> values = new HashMap<>(); int max = -1;
+            for (int c = 0; c < cells.getLength(); c++) {
+                Element cell = (Element) cells.item(c);
+                int index = columnIndex(cell.getAttribute("r"));
+                String type = cell.getAttribute("t");
+                String value = "";
+                if ("inlineStr".equals(type)) {
+                    NodeList text = cell.getElementsByTagName("t");
+                    if (text.getLength() > 0) value = text.item(0).getTextContent();
+                } else {
+                    NodeList raw = cell.getElementsByTagName("v");
+                    if (raw.getLength() > 0) value = raw.item(0).getTextContent();
+                    if ("s".equals(type) && !value.isEmpty()) {
+                        int si = Integer.parseInt(value);
+                        value = si >= 0 && si < shared.size() ? shared.get(si) : "";
+                    }
+                }
+                values.put(index, value); max = Math.max(max, index);
+            }
+            String[] row = new String[Math.max(0, max + 1)];
+            for (int i = 0; i < row.length; i++) row[i] = values.getOrDefault(i, "");
+            lines.add(row);
+        }
+        return rowsToJson(lines);
+    }
+
+    private JSONArray rowsToJson(List<String[]> lines) throws Exception {
+        if (lines.isEmpty()) throw new Exception("El archivo está vacío");
+        int headerRow = -1;
+        for (int i = 0; i < Math.min(lines.size(), 20); i++) {
+            Set<String> cols = new HashSet<>();
+            for (String value : lines.get(i)) cols.add(norm(value));
+            if (cols.contains("NOMBRE") && (cols.contains("X") || cols.contains("COORDENADAX")) && (cols.contains("Y") || cols.contains("COORDENADAY"))) { headerRow = i; break; }
+        }
+        if (headerRow < 0) throw new Exception("No encuentro las columnas NOMBRE, X y Y en las primeras 20 filas");
+        String[] columns = lines.get(headerRow);
+        JSONArray result = new JSONArray();
+        for (int i = headerRow + 1; i < lines.size(); i++) {
+            JSONObject row = makeRow(columns, lines.get(i));
+            if (row != null) result.put(row);
+        }
+        if (result.length() == 0) throw new Exception("No se encontraron elementos válidos con NOMBRE, X e Y");
+        return result;
+    }
+
+    private JSONObject makeRow(String[] columns, String[] values) throws Exception {
+        String type = "", name = "", xs = "", ys = "";
+        for (int i = 0; i < columns.length && i < values.length; i++) {
+            String key = norm(columns[i]); String value = values[i] == null ? "" : values[i].trim();
+            if (key.equals("TIPO")) type = value;
+            else if (key.equals("NOMBRE")) name = value;
+            else if (key.equals("X") || key.equals("COORDENADAX")) xs = value;
+            else if (key.equals("Y") || key.equals("COORDENADAY")) ys = value;
+        }
+        if (name.isEmpty() || xs.isEmpty() || ys.isEmpty()) return null;
+        return new JSONObject().put("type", type).put("name", name).put("x", number(xs)).put("y", number(ys));
+    }
+
+    private double number(String value) {
+        String s = value.trim().replace(" ", "");
+        if (s.contains(",") && s.contains(".")) {
+            if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(".", "").replace(',', '.');
+            else s = s.replace(",", "");
+        } else if (s.contains(",")) s = s.replace(',', '.');
+        return Double.parseDouble(s);
+    }
+
+    private String norm(String value) {
+        return Normalizer.normalize(value == null ? "" : value, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "").replaceAll("[^A-Za-z0-9]", "").toUpperCase(Locale.ROOT);
+    }
+
+    private List<String> sharedStrings(byte[] bytes) throws Exception {
+        List<String> values = new ArrayList<>();
+        if (bytes == null) return values;
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(bytes));
+        NodeList nodes = doc.getElementsByTagName("si");
+        for (int i = 0; i < nodes.getLength(); i++) values.add(nodes.item(i).getTextContent());
+        return values;
+    }
+
+    private int columnIndex(String reference) {
+        int value = 0;
+        for (int i = 0; i < reference.length() && Character.isLetter(reference.charAt(i)); i++)
+            value = value * 26 + (Character.toUpperCase(reference.charAt(i)) - 'A' + 1);
+        return value - 1;
+    }
+}

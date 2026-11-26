@@ -1,9 +1,3 @@
-CORRECCION BUSQUEDA POR RADIO
-
-Problema localizado: navigator.geolocation.getCurrentPosition estaba recibiendo el objeto de opciones como segundo argumento, que en la API corresponde al callback de error. Si Android no devolvia posicion, la pantalla no mostraba nada.
-
-La correccion usa:
-getCurrentPosition(success, error, options)
-y muestra en radioStatus los errores de permiso, GPS no disponible o timeout.
-
-No modifica importacion, menu, iconos, fondo, splash, Maps, Earth ni WhatsApp.
+Añade el botón "💧 Volver al menú" en las pantallas internas de Datos/Importar, Destino y Elementos por radio.
+Google Earth abre una aplicación/enlace externo; al volver a CRNL se mantiene el botón gota para abrir el menú.
+No se modifica ninguna función de importación, búsqueda, Maps, Earth o WhatsApp.

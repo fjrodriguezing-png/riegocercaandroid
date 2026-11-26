@@ -1,4 +1,5 @@
-CORRECCION CRNL
-1. BUSCAR ELEMENTOS: reescribe la funcion completa usando navigator.geolocation.getCurrentPosition(success,error,options), muestra "Obteniendo ubicación GPS…" y errores visibles.
-2. ICONOS MENU: XLSX, Destino y Google Earth pasan a width:100%, height:100%, object-fit:cover y padding 0 para llenar completamente sus cuadriculas.
-No se modifica la importacion Excel, Maps, Earth, WhatsApp, splash ni fondo.
+PARCHE CONSOLIDADO. Aplica juntos, sobre el proyecto actual:
+- Volver al menú en Datos, Destino y Elementos por radio.
+- Buscar elementos por radio con GPS success/error/options y mensajes visibles.
+- Iconos XLSX, Destino y Google Earth al 100% de cada baldosa.
+No modifica la importación Excel, Maps, Earth, WhatsApp, splash ni fondo.

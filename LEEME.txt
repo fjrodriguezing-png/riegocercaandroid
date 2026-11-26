@@ -1,9 +1,10 @@
-ARCHIVO PARA GITHUB
-1. Sube eliminar_icono_crnl_full.py a la raiz del repositorio.
-2. Sube .github/workflows/eliminar-icono-crnl-full.yml manteniendo esa ruta.
-3. Commit changes.
-4. Actions > Eliminar icono_crnl_full.png > Run workflow.
-5. El workflow elimina icono_crnl_full.png en cualquier carpeta del proyecto y hace commit/push de la eliminacion.
-6. Si ya estaba eliminado, finaliza correctamente sin cambiar otros archivos.
+PARCHE CRNL - IMPORTACION NATIVA
 
-IMPORTANTE: este workflow no modifica AndroidManifest.xml ni ningun otro icono.
+1. Subir aplicar_importacion_nativa.py a la raiz del repositorio.
+2. Subir fix-import-native.yml a .github/workflows/
+3. Ejecutar Actions > Corregir importacion Excel CSV nativa > Run workflow.
+4. Descargar el artefacto CRNL-IMPORT-FIX-APK.
+
+El parche NO reescribe MainActivity.java, ImportBridge.java, NativeTabularImporter.java ni el menu.
+Verifica que la ruta nativa ya presente esta completa y elimina la antigua dependencia remota xlsx.full.min.js.
+Si falta una pieza, detiene la compilacion en vez de generar otro APK incorrecto.

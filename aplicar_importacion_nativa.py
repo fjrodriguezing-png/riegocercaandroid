@@ -1,24 +1,49 @@
 from pathlib import Path
-import re
-H=Path('app/src/main/assets/index.html')
-J=Path('app/src/main/java/es/riegocerca/maps/MainActivity.java')
-G=Path('app/build.gradle')
-for p in (H,J,G):
-    if not p.exists(): raise SystemExit('Falta '+str(p))
-h=H.read_text(encoding='utf-8')
-# Remove remote SheetJS dependency if present.
-h=re.sub(r'<script\s+src="https://cdn\.jsdelivr\.net/npm/xlsx@[^\"]+"\s*></script>','',h)
-start=h.find("$('#file').onchange=")
-if start<0: raise SystemExit('No se encontro #file onchange')
-end=h.find("try{rows=JSON.parse",start)
-if end<0: raise SystemExit('No se encontro restauracion localStorage')
-new="""window.receiveImportedRows=function(json){try{const data=JSON.parse(json);rows=data.filter(r=>r&&r.name&&Number.isFinite(Number(r.x))&&Number.isFinite(Number(r.y))).map(r=>({type:String(r.type||''),x:Number(r.x),y:Number(r.y),name:String(r.name)}));localStorage.setItem('crnl_rows',JSON.stringify(rows));$('#status').textContent=`${rows.length} elementos importados y guardados`;render()}catch(e){$('#status').textContent='Error al procesar los datos importados: '+e.message}};$('#file').onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f){$('#status').textContent='No se seleccionó archivo.';return}$('#status').textContent='Importando '+f.name+'…';if(window.AndroidImport&&typeof window.AndroidImport.importFile==='function')window.AndroidImport.importFile();else $('#status').textContent='Importador Android no disponible.';};"""
-h=h[:start]+new+h[end:]
-H.write_text(h,encoding='utf-8')
-# This patch intentionally checks for the native bridge implementation in MainActivity.
-j=J.read_text(encoding='utf-8')
-if 'class ImportBridge' not in j or 'parseXlsx' not in j or 'parseCsv' not in j:
-    raise SystemExit('MainActivity todavía no contiene el importador nativo completo. Usa primero el ZIP completo corregido o sustituye MainActivity con la versión nativa.')
-# bump
-b=G.read_text();m=re.search(r'versionCode\s+(\d+)',b);code=int(m.group(1))+1;G.write_text(re.sub(r'versionCode\s+\d+',f'versionCode {code}',b,1))
-print('Importacion nativa enlazada; versionCode',code)
+
+root = Path('.')
+java_dir = root / 'app/src/main/java/es/riegocerca/maps'
+assets = root / 'app/src/main/assets'
+main = java_dir / 'MainActivity.java'
+imp = java_dir / 'ImportBridge.java'
+native = java_dir / 'NativeTabularImporter.java'
+index = assets / 'index.html'
+
+required = [main, imp, native, index]
+missing = [str(p) for p in required if not p.exists()]
+if missing:
+    raise SystemExit('FALTAN ARCHIVOS DEL PROYECTO: ' + ', '.join(missing))
+
+# Verify the currently integrated native import path is present, without rebuilding UI/menu.
+main_text = main.read_text(encoding='utf-8')
+index_text = index.read_text(encoding='utf-8')
+imp_text = imp.read_text(encoding='utf-8')
+native_text = native.read_text(encoding='utf-8')
+
+checks = {
+    'AndroidImport registrado': 'AndroidImport' in main_text and 'ImportBridge' in main_text,
+    'onActivityResult presente': 'onActivityResult' in main_text,
+    'NativeTabularImporter invocado': 'NativeTabularImporter' in main_text and '.read(uri)' in main_text,
+    'ImportBridge importFile': 'importFile()' in imp_text,
+    'Parser XLSX nativo': 'ZipInputStream' in native_text and 'sheet1.xml' in native_text,
+    'Recepcion JS': 'receiveImportedRows' in index_text,
+}
+for label, ok in checks.items():
+    print(('OK' if ok else 'ERROR') + ': ' + label)
+if not all(checks.values()):
+    raise SystemExit('La ruta de importacion nativa no esta completa en el proyecto actual.')
+
+# Remove the remote XLSX dependency so the current app cannot fall back to the old CDN path.
+old = '<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>'
+if old in index_text:
+    index_text = index_text.replace(old, '')
+    index.write_text(index_text, encoding='utf-8')
+    print('OK: eliminada dependencia remota xlsx.full.min.js')
+else:
+    print('OK: no existe dependencia remota xlsx.full.min.js')
+
+# Final hard gate: do not alter menu, splash, background, Maps/Earth/WhatsApp.
+index_text = index.read_text(encoding='utf-8')
+for token in ['xlsx.jfif','destino.png','google earth.jfif','splash_nova_limia.jpg','earthMenu','aWa','AndroidMaps']:
+    if token not in index_text:
+        raise SystemExit('ERROR: falta elemento existente que debe conservarse: ' + token)
+print('OK: menu actual, splash, fondo, Maps, Earth y WhatsApp conservados')

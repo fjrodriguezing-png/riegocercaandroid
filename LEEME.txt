@@ -1,10 +1,15 @@
-PARCHE CRNL - IMPORTACION NATIVA
+RESTAURAR IMPORTACION EXCEL QUE FUNCIONABA
 
-1. Subir aplicar_importacion_nativa.py a la raiz del repositorio.
-2. Subir fix-import-native.yml a .github/workflows/
-3. Ejecutar Actions > Corregir importacion Excel CSV nativa > Run workflow.
-4. Descargar el artefacto CRNL-IMPORT-FIX-APK.
+Recupera la ruta anterior:
+icono XLSX -> pantalla Datos -> input de archivo -> WebView onShowFileChooser -> XLSX.read -> localStorage.
 
-El parche NO reescribe MainActivity.java, ImportBridge.java, NativeTabularImporter.java ni el menu.
-Verifica que la ruta nativa ya presente esta completa y elimina la antigua dependencia remota xlsx.full.min.js.
-Si falta una pieza, detiene la compilacion en vez de generar otro APK incorrecto.
+No usa AndroidImport para iniciar la importacion.
+No modifica MainActivity.java, ImportBridge.java ni NativeTabularImporter.java.
+Conserva el menu en cuadricula y los iconos XLSX, Destino y Google Earth.
+
+Subir:
+- restaurar_importacion_excel_funcional.py a la raiz del repositorio
+- restaurar-importacion-excel-funcional.yml a .github/workflows/
+
+Ejecutar Actions > Restaurar importacion Excel funcional > Run workflow.
+Descargar CRNL-EXCEL-RESTAURADO-APK.

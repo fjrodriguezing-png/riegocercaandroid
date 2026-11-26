@@ -1,15 +1,9 @@
-RESTAURAR IMPORTACION EXCEL QUE FUNCIONABA
+CORRECCION BUSQUEDA POR RADIO
 
-Recupera la ruta anterior:
-icono XLSX -> pantalla Datos -> input de archivo -> WebView onShowFileChooser -> XLSX.read -> localStorage.
+Problema localizado: navigator.geolocation.getCurrentPosition estaba recibiendo el objeto de opciones como segundo argumento, que en la API corresponde al callback de error. Si Android no devolvia posicion, la pantalla no mostraba nada.
 
-No usa AndroidImport para iniciar la importacion.
-No modifica MainActivity.java, ImportBridge.java ni NativeTabularImporter.java.
-Conserva el menu en cuadricula y los iconos XLSX, Destino y Google Earth.
+La correccion usa:
+getCurrentPosition(success, error, options)
+y muestra en radioStatus los errores de permiso, GPS no disponible o timeout.
 
-Subir:
-- restaurar_importacion_excel_funcional.py a la raiz del repositorio
-- restaurar-importacion-excel-funcional.yml a .github/workflows/
-
-Ejecutar Actions > Restaurar importacion Excel funcional > Run workflow.
-Descargar CRNL-EXCEL-RESTAURADO-APK.
+No modifica importacion, menu, iconos, fondo, splash, Maps, Earth ni WhatsApp.

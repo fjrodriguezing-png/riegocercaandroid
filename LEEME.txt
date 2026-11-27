@@ -1,2 +1,5 @@
-Restaura la imagen ELEMENTOS DE RIEGO en la opción Elementos por radio.
-Conserva data-go="radio", la puerta verde de Cerrar menú, Volver al menú y las funciones existentes.
+CORRIGE EL ERROR DE LA CAPTURA: el workflow anterior exigía cerrar_menu.png pero el ZIP no lo incluía.
+Este ZIP incluye físicamente:
+- app/src/main/assets/elementos_riego.png
+- app/src/main/assets/cerrar_menu.png
+Y restaura ambos botones conservando data-go="radio" e id="closeMenu".

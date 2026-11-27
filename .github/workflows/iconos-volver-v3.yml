@@ -1,0 +1,39 @@
+name: CRNL iconos y volver menu V3
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+      - name: Verificar iconos
+        run: |
+          test -f app/src/main/assets/elementos_riego.png
+          test -f app/src/main/assets/cerrar_menu.png
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Aplicar iconos y volver al menu
+        run: python aplicar_iconos_volver_v3.py
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK limpio
+        run: gradle --no-daemon clean assembleDebug
+      - name: Preparar APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk CRNL-ICONOS-VOLVER-V3-debug.apk
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CRNL-ICONOS-VOLVER-V3-APK
+          path: CRNL-ICONOS-VOLVER-V3-debug.apk

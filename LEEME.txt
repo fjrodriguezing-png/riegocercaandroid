@@ -1,2 +1,4 @@
-V2 corrige el fallo del parche anterior: la comprobacion global detectaba el primer boton Volver al menu y evitaba insertar los otros dos. Esta version inserta y verifica por separado Datos, Destino y Elementos por radio.
-Tambien conserva la correccion del GPS y los iconos al 100% de las baldosas.
+Incluye elementos_riego.png para app/src/main/assets/ y un parche que sustituye solo el botón "Elementos por radio" por esta imagen.
+La imagen ya contiene el texto ELEMENTOS DE RIEGO en la parte inferior.
+El botón conserva data-go="radio", por lo que abre exactamente la misma pantalla y función de búsqueda por radio.
+No modifica Importar, Destino, Google Earth, WhatsApp, splash ni fondo.

@@ -1,5 +1,6 @@
-CORRIGE EL ERROR DE LA CAPTURA: el workflow anterior exigía cerrar_menu.png pero el ZIP no lo incluía.
-Este ZIP incluye físicamente:
-- app/src/main/assets/elementos_riego.png
-- app/src/main/assets/cerrar_menu.png
-Y restaura ambos botones conservando data-go="radio" e id="closeMenu".
+Incluye y aplica juntos:
+- icono ELEMENTOS DE RIEGO para Elementos por radio;
+- puerta verde para Cerrar menú;
+- botón Volver al menú dentro de Importar/Datos, Destino y Elementos de Riego.
+Conserva las acciones actuales.
+Google Earth abre externamente; al volver a CRNL queda disponible la gota del menú.

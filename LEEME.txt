@@ -1,4 +1,1 @@
-Incluye elementos_riego.png para app/src/main/assets/ y un parche que sustituye solo el botón "Elementos por radio" por esta imagen.
-La imagen ya contiene el texto ELEMENTOS DE RIEGO en la parte inferior.
-El botón conserva data-go="radio", por lo que abre exactamente la misma pantalla y función de búsqueda por radio.
-No modifica Importar, Destino, Google Earth, WhatsApp, splash ni fondo.
+Aplica la puerta verde al botón Cerrar menú y añade Volver al menú en Datos/Importar, Destino y Elementos de Riego. Google Earth es externo, por lo que al volver a la app permanece la gota para abrir el menú. No altera las funciones actuales.

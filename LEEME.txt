@@ -1,1 +1,2 @@
-Aplica la puerta verde al botón Cerrar menú y añade Volver al menú en Datos/Importar, Destino y Elementos de Riego. Google Earth es externo, por lo que al volver a la app permanece la gota para abrir el menú. No altera las funciones actuales.
+Restaura la imagen ELEMENTOS DE RIEGO en la opción Elementos por radio.
+Conserva data-go="radio", la puerta verde de Cerrar menú, Volver al menú y las funciones existentes.
